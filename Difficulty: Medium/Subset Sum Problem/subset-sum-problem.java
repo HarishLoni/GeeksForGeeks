@@ -34,19 +34,33 @@ class Solution {
 
     static Boolean isSubsetSum(int arr[], int target) {
         // code here
-        return solve(arr,target,0,arr.length);
+        
+        int ind=arr.length-1;
+        Boolean dp[][]=new Boolean[ind+1][target+1];
+        
+        
+        return solve(arr,target,ind,dp);
+    
     }
     
-    public static boolean solve(int arr[], int target,int i,int n){
-        if(i==n){
+    public static boolean solve(int[] arr,int target,int ind,Boolean[][] dp){
         if(target==0){
             return true;
         }
-        return false;
+        if(ind==0){
+            return target==arr[0];
         }
-        if(arr[i]<=target){
-            return solve(arr,target-arr[i],i+1,n) || solve(arr,target,i+1,n);
+        if(dp[ind][target]!=null){
+            return dp[ind][target];
         }
-        return solve(arr,target,i+1,n);
+        boolean nottake=solve(arr,target,ind-1,dp);
+        
+        boolean take=false;
+        
+        if(target>=arr[ind]){
+            take=solve(arr,target-arr[ind],ind-1,dp);
+        }
+        
+        return dp[ind][target]=take || nottake;
     }
 }
